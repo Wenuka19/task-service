@@ -1,7 +1,11 @@
 package main
 
 import (
+	"github.com/Wenuka19/task-service/internal/application/service"
 	"github.com/Wenuka19/task-service/internal/config"
+	_ "github.com/Wenuka19/task-service/internal/infrastructure/db"
+	"github.com/Wenuka19/task-service/internal/infrastructure/repository"
+	"github.com/Wenuka19/task-service/internal/interfaces/http"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,13 +15,12 @@ func main() {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
-	err := r.Run()
+	taskRepo := repository.NewTaskRepository()
+	taskService := service.NewTaskService(taskRepo)
+	taskHandler := http.NewTaskHandler(taskService)
+	taskHandler.RegisterRoutes(r)
 
-	if err != nil {
-		return
-	}
-
-	err = r.Run(":" + config.AppConfig.Port)
+	err := r.Run(":" + config.AppConfig.Port)
 
 	if err != nil {
 		return

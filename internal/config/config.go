@@ -7,7 +7,12 @@ import (
 )
 
 type Config struct {
-	Port string
+	Port       string
+	DBHost     string
+	DBPort     string
+	DBUser     string
+	DBPassword string
+	DBName     string
 }
 
 var AppConfig *Config
@@ -19,7 +24,12 @@ func init() {
 	}
 
 	AppConfig = &Config{
-		Port: getEnv("PORT", "8080"),
+		Port:       getEnv("PORT", "8080"),
+		DBHost:     getEnv("DB_HOST", "localhost"),
+		DBPort:     getEnv("DB_PORT", "5432"),
+		DBUser:     getEnv("DB_USER", "postgres"),
+		DBPassword: getEnv("DB_PASSWORD", "secret"),
+		DBName:     getEnv("DB_NAME", "taskdb"),
 	}
 }
 
